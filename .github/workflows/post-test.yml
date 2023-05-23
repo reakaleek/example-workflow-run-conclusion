@@ -1,0 +1,24 @@
+name: post-test
+
+on:
+  workflow_run:
+    workflows:
+      - test
+    types:
+      - completed
+    branches:
+      - main
+
+
+jobs:
+
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo '${{ toJSON(github.event.workflow_run) }}'
+
+  hello:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - run: echo "Hello, World!"
